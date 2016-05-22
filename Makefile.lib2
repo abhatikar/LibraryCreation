@@ -1,0 +1,28 @@
+#LIB source files.
+LIBSRC =  lib2.c
+
+LIBOBJ = $(LIBSRC:.c=.o)
+
+LIBOUT = wifi
+
+# include directories
+INCLUDES = -I/usr/local/include -I.
+
+# C compiler flags (-g -O2 -Wall)
+CCFLAGS = -g -fPIC -Wall -Wextra -std=c99 -D_XOPEN_SOURCE=500 -shared
+
+# compiler
+CCC = gcc
+
+.SUFFIXES: .c
+
+default: $(LIBOUT)
+
+.c.o:
+	$(CCC) $(INCLUDES) $(CCFLAGS) -c $< -o $@
+
+$(LIBOUT): $(LIBOBJ)
+	$(CCC) -shared -fPIC -o lib$(LIBOUT).so $(LIBOBJ) -Wl,--whole-archive -L . -lchannelselector -Wl,--no-whole-archive
+
+clean:
+	rm -f $(LIBOBJ) lib$(LIBOUT).so

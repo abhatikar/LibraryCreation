@@ -1,0 +1,28 @@
+#LIB source files.
+LIBSRC =  lib1.c
+
+LIBOBJ = $(LIBSRC:.c=.o)
+
+LIBOUT = channelselector
+
+# include directories
+INCLUDES = -I/usr/local/include -I.
+
+# C compiler flags (-g -O2 -Wall)
+CCFLAGS = -g -fPIC -Wall -Wextra
+
+# compiler
+CCC = gcc
+
+.SUFFIXES: .c
+
+default: $(LIBOUT)
+
+.c.o:
+	$(CCC) $(INCLUDES) $(CCFLAGS) -c $< -o $@
+
+$(LIBOUT): $(LIBOBJ)
+	ar rcs lib$(LIBOUT).a $(LIBOBJ)
+
+clean:
+	rm -f $(LIBOBJ) lib$(LIBOUT).a
